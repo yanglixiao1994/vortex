@@ -30,6 +30,7 @@ public:
 	float r, g, b;
 	color operator+(const color&c) { return color(this->r + c.r, this->g + c.g, this->b + c.b); };
 	color& operator+=(const color&c) { this->r += c.r; this->g += c.g; this->b += c.b; return *this; }
+	color& operator/=(uint32 n) { this->r /= n; this->g /= n; this->b /= n; return *this; }
 };
 
 using vec3f = vec3<float>;
