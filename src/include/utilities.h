@@ -35,11 +35,11 @@ using vec2i = vec2<int>;
 
 struct pic {
 	pic(uint16 W, uint16 H, std::vector<color>D)
-		:width{ W }, height{ H }, data{ D } {
-		data.reserve(width * height);
+		:width{ W }, height{ H }, _data{ D } {
+		_data.reserve(width * height);
 	};
 	void saveToPNG(const std::string&);
 	uint16 width;
 	uint16 height;
-	std::vector<color>data;
+	std::vector<color>_data;
 };
