@@ -90,7 +90,7 @@ SVPNG_LINKAGE void svpng(SVPNG_OUTPUT, unsigned w, unsigned h, const unsigned ch
     SVPNG_U8A("\x89PNG\r\n\32\n", 8);           /* Magic */
     SVPNG_BEGIN("IHDR", 13);                    /* IHDR chunk { */
     SVPNG_U32C(w); SVPNG_U32C(h);               /*   Width & Height (8 bytes) */
-    SVPNG_U8C(8); SVPNG_U8C(alpha ? 6 : 2);     /*   Depth=8, Color=True color with/without alpha (2 bytes) */
+    SVPNG_U8C(8); SVPNG_U8C(alpha ? 6 : 2);     /*   Depth=8, RGB=True RGB with/without alpha (2 bytes) */
     SVPNG_U8AC("\0\0\0", 3);                    /*   Compression=Deflate, Filter=No, Interlace=No (3 bytes) */
     SVPNG_END();                                /* } */
     SVPNG_BEGIN("IDAT", 2 + h * (5 + p) + 4);   /* IDAT chunk { */
