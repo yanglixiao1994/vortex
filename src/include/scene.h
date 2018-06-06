@@ -21,6 +21,9 @@ public:
 	void render();
 	void setSampleMethod(const ESampleMethod&sm = ESampleMethod::Jettered, uint16 samples = 64,uint16 steps = 100,uint8 threads = 8);
 	void setCanvas(uint16 width = 512, uint16 height = 512);
+	void setAttenuation(bool att) {
+		attenuation = att;
+	}
 	void saveToPNG(const std::string&);
 private:
 	RGBF march(const vec2i&pos, const vec2f&dir); 
@@ -33,4 +36,5 @@ private:
 	uint16 _steps;
 	uint16 _width;
 	uint16 _height;
+	bool attenuation;
 };

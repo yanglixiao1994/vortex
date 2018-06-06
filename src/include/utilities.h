@@ -28,6 +28,12 @@ public:
 	RGB operator+(const RGB&c) { return RGB(this->r + c.r, this->g + c.g, this->b + c.b); };
 	RGB& operator+=(const RGB&c) { this->r += c.r; this->g += c.g; this->b += c.b; return *this; }
 	RGB& operator/=(T n) { this->r /= n; this->g /= n; this->b /= n; return *this; }
+	RGB operator*(const RGB&c) { 
+		return RGB(this->r * c.r, this->g * c.g, this->b * c.b); 
+	}
+	RGB operator*(float c) {
+		return RGB(this->r * c, this->g * c, this->b * c);
+	}
 };
 using vec3f = vec3<float>;
 using vec3i = vec3<int>;

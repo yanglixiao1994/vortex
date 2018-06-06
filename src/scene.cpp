@@ -10,6 +10,7 @@ void Scene::setCanvas(uint16 width, uint16 height) {
 /**Return the RGB of the nearest surface in a direction.*/
 RGBF Scene::march(const vec2i&pos, const vec2f&dir) {
 	float nearest = sqrtf(_width * _width + _height * _height);
+	float farnest = nearest;
 	RGBF result{0.f,0.f};
 	for (const auto&sdf : sdfs) {
 		float dist = sdf->getDist(pos.x, pos.y);
@@ -22,7 +23,9 @@ RGBF Scene::march(const vec2i&pos, const vec2f&dir) {
 		}
 		if (dist < nearest) {
 			nearest = dist;
-			result = sdf->diffuse;
+			if(attenuation)
+				result = sdf->diffuse * (1 - dist / farnest);
+			else result = sdf->diffuse;
 		}
 	}
 	return result;
