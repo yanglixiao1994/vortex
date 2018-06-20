@@ -9,8 +9,76 @@ using uint64 = unsigned long int;
 template <typename T>
 class vec2 {
 public:
-	vec2(T xx = 0, T yy = 0) :x{ xx }, y{ yy } {}
 	T x, y;
+	vec2() { x = y = 0; }
+	vec2(T xx, T yy) :x(xx), y(yy) {}
+	bool HasNaNs()const { return isNaN(x) || isNaN(y); }
+	vec2(const vec2<T>&v) {
+		x = v.x;
+		y = v.y;
+	}
+	vec2<T> &operator=(const vec2<T>&v) {
+		x = v.x;
+		y = v.y;
+		return *this;
+	}
+	vec2<T> operator+(const vec2<T>&v)const {
+		return vec2(x + v.x, y + v.y);
+	}
+	vec2<T> &operator+=(const vec2<T>&v) {
+		x += v.x;
+		y += v.y;
+		return *this;
+	}
+	vec2<T> operator-(const vec2<T>&v)const {
+		return vec2(x - v.x, y - v.y);
+	}
+	vec2<T> &operator-=(const vec2<T>&v) {
+		x -= v.x;
+		y -= v.y;
+		return *this;
+	}
+	bool operator==(const vec2<T>&v)const { return x == v.x && y == v.y; }
+	bool operator!=(const vec2<T>&v)const { return x != v.x || y != v.y; }
+	template <typename U>
+	vec2<T> operator*(U u)const {
+		return vec2<T>(x * u, y * u);
+	}
+	template <typename U>
+	vec2<T>& operator*=(U u) {
+		x *= u;
+		y *= u;
+		return *this;
+	}
+	template <typename U>
+	vec2<T> operator/(U u)const {
+		float div = (Float)1 / u;
+		return vec2<T>(x * div, y * div);
+	}
+	template <typename U>
+	vec2<T>& operator/=(U u) {
+		float div = (Float)1 / u;
+		x *= div;
+		y *= div;
+		return *this;
+	}
+	vec2<T> operator-()const {
+		return vec2(-x, -y);
+	}
+	void Normalize() {
+		double l = Length();
+		x /= l;
+		y /= l;
+	}
+	T Dot(const vec2<T>&v)const {
+		return x * v.x + y * v.y;
+	}
+	T operator[](int i) const {
+		if (i == 0)return x;
+		else return y;
+	}
+	float LengthSquared()const { return x * x + y * y; }
+	float Length()const { return std::sqrt(LengthSquared()); }
 };
 
 template <typename T>

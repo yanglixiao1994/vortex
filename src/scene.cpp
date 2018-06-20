@@ -16,7 +16,7 @@ RGBF Scene::march(const vec2i&pos, const vec2f&dir) {
 		float dist = sdf->getDist(pos.x, pos.y);
 		float step = 1.f;
 		int steps = 0;
-		while(step > EPISILON && dist < nearest && steps < _steps) {
+		while(step > MINFLOAT && dist < nearest && steps < _steps) {
 			step = sdf->getDist(pos.x + dir.x * dist, pos.y + dir.y * dist);
 			dist += step;
 			steps++;
