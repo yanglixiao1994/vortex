@@ -5,7 +5,6 @@ using uint8 = unsigned char;
 using uint16 = unsigned short;
 using uint32 = unsigned int;
 using uint64 = unsigned long int;
-
 template <typename T>
 class vec2 {
 public:
@@ -80,14 +79,12 @@ public:
 	float LengthSquared()const { return x * x + y * y; }
 	float Length()const { return std::sqrt(LengthSquared()); }
 };
-
 template <typename T>
 class vec3 {
 public:
 	vec3(T xx = 0, T yy = 0, T zz = 0) :x{ xx }, y{ yy }, z{ zz } {}
 	T x, y, z;
 };
-
 template <typename T>
 class RGB {
 public:
@@ -109,7 +106,6 @@ using vec2f = vec2<float>;
 using vec2i = vec2<int>;
 using RGBF = RGB<float>;
 using RGB8I = RGB<uint8>;
-
 template<>
 class RGB<uint8> {
 public:
@@ -124,3 +120,29 @@ public:
 		return *this;
 	}
 };
+
+//template<typename T>
+//T linearInterpolation(T start, T end, float x) {
+//	return (end - start) * x + start;
+//}
+
+//template<>
+vec2f linearInterpolation(vec2f start, vec2f end, float x) {
+	return (end - start) * x + start;
+}
+/**The two line segments intersection problem is actually a 2 * 2 linear system.
+It can be solved by the Cramer's rule.
+Reference:https://en.wikipedia.org/wiki/Cramer%27s_rule
+*/
+vec2f lineIntersection(const vec2f &p1, const vec2f &p2, const vec2f &p3, const vec2f &p4) {
+	float det = (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x);
+	if (abs(det)< 1e-5f)return vec2f{ 0.f,0.f };
+	float det_s = (p3.x - p1.x) * (p3.y - p4.y) - (p3.y - p1.y) * (p3.x - p4.x);
+	float s = det_s / det;
+	float det_t = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
+	float t = det_t / det;
+	if (t < 0 || t > 1) {
+		return vec2f{ 0.f,0.f };
+	}
+	return vec2f(p1.x + (p2.x - p1.x) * s, p1.y + (p2.y - p1.y) * s);
+}

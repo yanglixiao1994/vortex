@@ -1,7 +1,7 @@
 #include "include/scene.h"
 #include "include/svpng.h"
 #include<iostream>
-
+using namespace vortex;
 void Scene::setCanvas(uint16 width, uint16 height) {
 	_width = width; _height = height;
 	_rendertarget_RGB_32F.resize(_width * _height);
@@ -9,26 +9,26 @@ void Scene::setCanvas(uint16 width, uint16 height) {
 }
 /**Return the RGB of the nearest surface in a direction.*/
 RGBF Scene::march(const vec2i&pos, const vec2f&dir) {
-	float nearest = sqrtf(_width * _width + _height * _height);
-	float farnest = nearest;
-	RGBF result{0.f,0.f};
-	for (const auto&sdf : sdfs) {
-		float dist = sdf->getDist(pos.x, pos.y);
-		float step = 1.f;
-		int steps = 0;
-		while(step > MINFLOAT && dist < nearest && steps < _steps) {
-			step = sdf->getDist(pos.x + dir.x * dist, pos.y + dir.y * dist);
-			dist += step;
-			steps++;
-		}
-		if (dist < nearest) {
-			nearest = dist;
-			if(attenuation)
-				result = sdf->diffuse * (1 - dist / farnest);
-			else result = sdf->diffuse;
-		}
-	}
-	return result;
+	//float nearest = sqrtf(_width * _width + _height * _height);
+	//float farnest = nearest;
+	//RGBF result{0.f,0.f};
+	//for (const auto&sdf : sdfs) {
+	//	float dist = sdf->getDist(pos.x, pos.y);
+	//	float step = 1.f;
+	//	int steps = 0;
+	//	while(step > MINFLOAT && dist < nearest && steps < _steps) {
+	//		step = sdf->getDist(pos.x + dir.x * dist, pos.y + dir.y * dist);
+	//		dist += step;
+	//		steps++;
+	//	}
+	//	if (dist < nearest) {
+	//		nearest = dist;
+	//		if(attenuation)
+	//			result = sdf->diffuse * (1 - dist / farnest);
+	//		else result = sdf->diffuse;
+	//	}
+	//}
+	//return result;
 }
 /**Sample every pixel and return the result in pic*/
 void Scene::render() {
@@ -91,7 +91,9 @@ void Scene::setSampleMethod(const ESampleMethod&sm, uint16 samples,uint16 steps,
 		break;
 	}
 }
+void Scene::drawLineSeg(const lineseg&line) {
 
+}
 void Scene::saveToPNG(const std::string&file) {
 	for (auto&result : _threads) {
 		if (result.get() == false) {

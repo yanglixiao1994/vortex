@@ -1,4 +1,5 @@
 #include "include/object.h"
+#include "external/Eigen/Dense"
 using namespace vortex;
 //Gather operator ,can be parallelized.Reduce.
 vec2f Polygon::calc_center(){
@@ -26,6 +27,59 @@ void Polygon::calc_closure() {
 	_closure.push_back(vec2f{ xmin,ymax });
 }
 
-float Polygon::calc_dist(const vec2f&p) {
 
+/**The two line segments intersection problem is actually a 2 * 2 linear system.
+	It can be solved by the Cramer's rule.
+	Reference:https://en.wikipedia.org/wiki/Cramer%27s_rule
+*/
+float Polygon::calc_dist(const vec2f&p,const vec2f&dir) {
+
+	float min_distance = MAXFLOAT;
+	for (auto i = vertexs.begin();;) {
+		auto oldptr = i;
+		++i;
+
+	}
+
+}
+/**
+I adopted a cornel cutting method. 
+You can find alternative ways in :
+http://graphics.stanford.edu/courses/cs468-10-fall/LectureSlides/10_Subdivision.pdf
+Time complexity:O(N)
+Space complexity:
+GPU Accerlator:No
+Unit Test:No
+*/
+void Polygon::subdivsion(int degree) {
+	//add assistant points
+	for (auto i = vertexs.begin(); i != vertexs.end();) {
+		auto oldptr = i;
+		++i;
+		if (i == vertexs.end()) {
+			vec2f p1 = linearInterpolation(oldptr->posi, vertexs.front().posi, 0.25);
+			vec2f p2 = linearInterpolation(oldptr->posi, vertexs.front().posi, 0.75);
+			vertex v1{ p1,oldptr->color,oldptr->mass / 2 };
+			vertex v2{ p2,vertexs.front().color,vertexs.front().mass / 2 };
+			vertexs.insert(vertexs.insert(vertexs.begin(), v2), v1);
+			break;
+		}
+		vec2f p1 = linearInterpolation(oldptr->posi, i->posi, 0.25);
+		vec2f p2 = linearInterpolation(oldptr->posi, i->posi, 0.75);
+
+		vertex v1{ p1,oldptr->color,oldptr->mass / 2 };
+		vertex v2{ p2,i->color,i->mass / 2 };
+		vertexs.insert(vertexs.insert(i, v2), v1);
+	}
+	//delete old cornel points
+	int count = 0;
+	for (auto i = vertexs.begin();;) {
+		if (count % 3 == 0) {
+			i = vertexs.erase(i);
+		}
+		else {
+			++i;
+			++count;
+		}
+	}
 }
